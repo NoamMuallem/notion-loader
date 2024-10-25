@@ -1,0 +1,39 @@
+name: Build and Compile TypeScript
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x' # Specify the Node.js version you want
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Compile TypeScript
+      - name: Compile TypeScript
+        run: cd ./packages/notion-astro-loader && npm run build
+
+      # Optionally, Step 5: Upload compiled files as artifacts (if needed)
+      # Uncomment this section if you want to store the compiled files for further use
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: build
+      #     path: dist/ # Adjust this path to where your compiled files are
+
+
