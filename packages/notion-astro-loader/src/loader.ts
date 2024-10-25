@@ -14,6 +14,7 @@ import type {
   PageObjectResponse,
   QueryDatabaseParameters,
 } from "./types.js";
+import { saveImageFilesAsString } from "./utils.js";
 
 export interface NotionLoaderOptions
   extends Pick<
@@ -29,6 +30,7 @@ export interface NotionLoaderOptions
    * You can import and apply the plugin function (recommended), or pass the plugin name as a string.
    */
   rehypePlugins?: RehypePlugins;
+  saveImagesAsStrings?: boolean;
 }
 
 /**
@@ -55,6 +57,7 @@ export interface NotionLoaderOptions
  * });
  */
 export function notionLoader({
+  saveImagesAsStrings = false,
   database_id,
   filter_properties,
   sorts,
@@ -143,6 +146,7 @@ export function notionLoader({
             notionClient,
             processor,
             page.id,
+            saveImagesAsStrings,
           )
             .catch((error: unknown) => {
               const errorMessage =
@@ -158,9 +162,12 @@ export function notionLoader({
 
               return undefined;
             })
-            .then((rendered) => {
+            .then(async (rendered) => {
               if (rendered !== undefined) {
                 logger.debug(`Rendered ${pageNameForLogger(page)}`);
+              }
+              if (saveImagesAsStrings) {
+                await saveImageFilesAsString(data);
               }
               store.set({
                 id: page.id,
