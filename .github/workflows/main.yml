@@ -33,7 +33,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add packages/notion-astro-loader/dist/ 
+          git add -f packages/notion-astro-loader/dist/ 
           git commit -m "Build: Add compiled files to dist folder"
           git push origin main
         continue-on-error: true
